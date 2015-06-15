@@ -33,51 +33,51 @@ MainConnection <- function(){
 
 
 
-# +---------------------------------------------------+
-# | Returns Base futures and options expiration dates |
-# +---------------------------------------------------+
+#' Returns Base futures and options expiration dates
+#' 
+#' @param connection ODBC Connection object
+#' @export
 
-dbOptionsExps = function(connection = NULL){
+fortsAllOptionsExps = function(connection = NULL){
   
   require('RODBC')
-  if(is.null(connection)) connection = MainConnection()
+  if(is.null(connection)) 
+    connection = MainConnection()
   
   req =  paste("SELECT DISTINCT  ExpDate, BaseSec FROM Options ORDER BY BaseSec", sep="")
-  df = sqlQuery(connection, req)
-  
+  df  = sqlQuery(connection, req)
   odbcClose(connection)
   
   return(df)
-  
 }
 
-# dbOptionsExps()
 
 
-# +--------------------------------------------------------+
-# ++++ Returns Base assets and Futures expiration dates ++++
-# +--------------------------------------------------------+
+#' Returns Base assets and Futures expiration dates
+#' 
+#' @param connection ODBC Connection object
+#' @export
 
-dbFuturesExps = function(connection = NULL){
-  
-  require('RODBC')
-  if(is.null(connection)) connection = MainConnection()
-  
-  req =  paste("SELECT DISTINCT BaseSec, SecCode, ExpDate FROM Futures ORDER BY BaseSec", sep="")
-  df = sqlQuery(connection, req)
-  
-  odbcClose(connection)
-  
-  return(df)
-  
-}
-
-# dbFuturesExps()
+  fortsAllFuturesExps = function(connection = NULL){
+    
+    require('RODBC')
+    if(is.null(connection)) connection = MainConnection()
+    
+    req =  paste("SELECT DISTINCT BaseSec, SecCode, ExpDate FROM Futures ORDER BY BaseSec", sep="")
+    df = sqlQuery(connection, req)
+    
+    odbcClose(connection)
+    
+    return(df)
+    
+  }
 
 
-# +------------------------------------------------------------+
-# +++ Merged futures, options expiration tabel with base sec +++
-# +------------------------------------------------------------+
+
+#' Merged futures, options expiration tables with base sec
+#' 
+#' @param connection ODBC Connection object
+#' @export
 
 dbFutOptExps = function(connection = NULL){
   
@@ -89,14 +89,18 @@ dbFutOptExps = function(connection = NULL){
   return(allexpdates)
 }
 
-# dbFutOptExps() 
 
 
-# +--------------------------------------------------------+
-# | --- Get data for multiple derivatives from database ---|
-# +--------------------------------------------------------+
 
-dbDerivInfo = function(derivs, types, connection = NULL){
+#' Get data for multiple derivatives from database
+#' 
+#' Ticker and LastTrade for futures; Ticker, TheorPrice and Volatility for options.
+#' @param derivs SecCodes vector
+#' @param types fut/call/put vector
+#' @param connection ODBC Connection object
+#' @export
+
+fortsDerivInfo = function(derivs, types, connection = NULL){
   
   require('RODBC')
   if(is.null(connection)) connection = MainConnection() 
@@ -123,11 +127,15 @@ dbDerivInfo = function(derivs, types, connection = NULL){
 }
 
 
-# +--------------------------------------------+
-# --- Returns table with options a la Quik --- |
-# +--------------------------------------------+
 
-OptionBoard = function(b.asset, e.date, connection = NULL){
+#' Returns table with options a la Quik 
+#'
+#' @param b.asset base futures ticker
+#' @param e.date option expiration date in dd.mm.yyyy format (%d.%m.%Y)
+#' @param connection ODBC Connection object
+#' @export
+
+fortsOptionBoard = function(b.asset, e.date, connection = NULL){
   
   require('RODBC')
   if(is.null(connection)) connection = MainConnection() 
@@ -147,14 +155,15 @@ OptionBoard = function(b.asset, e.date, connection = NULL){
   return( merge(puts.dframe, calls.dframe, columns="strike") )
 }
 
-#  View(OptionBoard('RIM5', '15.06.2015'))
 
 
-# +-----------------------------------------+
-# ----  Base Asset Price of moex ticker --- |
-# +-----------------------------------------+
+#' Base Asset Price of moex ticker 
+#'
+#' @param base.asset MOEX ticker
+#' @param connection ODBC Connection object
+#' @export
 
-BaseAssetPrice = function(base.asset, connection = NULL)
+fortsBaseAssetPrice = function(base.asset, connection = NULL)
   {
   
   require('RODBC')
@@ -172,15 +181,15 @@ BaseAssetPrice = function(base.asset, connection = NULL)
 
 }
 
-# BaseAssetPrice('GOLDS')
 
 
+#' Futures prices of a base asset table
+#'
+#' @param base.asset RTS ticker
+#' @param connection ODBC Connection object
+#' @export
 
-# +-----------------------------------------+
-# ----  Futures prices of a base asset table
-# +-----------------------------------------+
-
-Fut.Prices = function(base.asset, connection = NULL)
+fortsFutsPrices = function(base.asset, connection = NULL)
   {
   
   require('RODBC')
@@ -200,14 +209,15 @@ Fut.Prices = function(base.asset, connection = NULL)
   
 }
 
-# Fut.Prices('RTS')
 
 
-# +---------------------------------------+
-# ----  Price of a single fut by ticker
-# +---------------------------------------+
+#' Price of a single fut by ticker
+#'
+#' @param fut.ticker futures ticker
+#' @param connection ODBC Connection object
+#' @export
 
-dbFutPrice = function(fut.ticker, connection = NULL)
+fortsFutPrice = function(fut.ticker, connection = NULL)
   {
   
   require('RODBC')
@@ -225,14 +235,17 @@ dbFutPrice = function(fut.ticker, connection = NULL)
   
 }
 
-# dbFutPrice('RIU5')
 
 
-# +------------------------------------+
-# ----  Strikes and vola table
-# +------------------------------------+
+#' Strikes and vola table
+#'
+#' @param base.fut futures ticker
+#' @param base.asset RTS ticker
+#' @param exp.date options series expiration date
+#' @param connection ODBC Connection object
+#' @export
 
-DB.Strikes.Vola = function(base.fut = NULL, base.asset = NULL, exp.date, connection = NULL)
+fortsIvAtStrike = function(base.fut = NULL, base.asset = NULL, exp.date, connection = NULL)
 {
   require('RODBC')
   if(is.null(connection)) connection = MainConnection() 
@@ -260,13 +273,17 @@ DB.Strikes.Vola = function(base.fut = NULL, base.asset = NULL, exp.date, connect
   return(res)
 }
 
-# DB.Strikes.Vola(base.asset = 'RTS', exp.date = '15.06.2015')
 
-# +---------------------------------+
-# ----  Strikes, Ask, Bid table --- |
-# +---------------------------------+
 
-DB.Strikes.Ask.Bid = function(base.fut, exp.date, connection = NULL)
+#' Strikes, bid, ask, option type table
+#'
+#' @param base.fut futures ticker
+#' @param base.asset RTS ticker
+#' @param exp.date options series expiration date
+#' @param connection ODBC Connection object
+#' @export
+
+fortsStrikesAskBid = function(base.fut, exp.date, connection = NULL)
 {
   require('RODBC')
   if(is.null(connection)) connection = MainConnection() 
@@ -297,58 +314,4 @@ DB.Strikes.Ask.Bid = function(base.fut, exp.date, connection = NULL)
 # )
 
 
-# +-----------------------------------------+
-# --- Get Symbol history (not in use)
-# +-----------------------------------------+
-
-DB.TickerHistory = function(ticker, connection = NULL)
-{
-  require('DBI')
-  if(is.null(connection)) connection = MainConnection() 
-  
-  dbGetQuery(connection, 'SET NAMES \'utf8\'')
-  
-  req.str = paste("SELECT * FROM History WHERE ticker='", ticker,"'", sep='')
-  res = dbGetQuery(connection, req.str)
-  res$d = as.Date(res$d, format='%d.%m.%Y')
-  odbcClose(connection)
-  
-  return(res)
-}
-
-# DB.TickerHistory(ticker='RTSI')
-
-# plotdata=DB.TickerHistory(ticker='RTSI')
-# plotdata = plotdata  %>% select(d, price) %>% filter(d>as.Date('01.01.2015', '%d.%m.%Y')) %>% arrange(d)
-# 
-# lvs = c(format(plotdata$d, '%d.%m.%Y') )
-# plotdata$d = ordered(plotdata$d, levels=lvs)
-# typeof(plotdata$d)
-# 
-# ggplot(plotdata, aes(x=d, y=price)) + geom_point() 
-# 
-# gv = gvisLineChart(plotdata, xvar = 'd', yvar = 'price' ) 
-# plot(gv)
-
-
-# +-----------------------------------------+
-# --- Get symbols, lot size
-# +-----------------------------------------+
-
-DB.Symbols = function(connection = NULL)
-{
-  require('RODBC')
-  if(is.null(connection)) connection = MainConnection() 
-  
-  #sqlQuery(connection, 'SET NAMES \'CP1251\'')
-  
-  req.str = 'SELECT Symbols.*,BaseAssets.LongName FROM BaseAssets inner join Symbols on BaseAssets.SecCode=Symbols.moex'
-  res = sqlQuery(connection, req.str)
-  odbcClose(connection)
-  
-  return(res)
-  
-}
-
-# DB.Symbols()
 
