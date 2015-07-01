@@ -6,7 +6,7 @@ The package for structured products portfolio calculation. The portfolio include
 ## Input
 For input use:
 
-1. Options with parameters:
+- Options with parameters:
 * type = (call, put)
 * strike = numeric
 * expdate = Date
@@ -17,7 +17,7 @@ For input use:
 * q = numeric - face value
 
 
-2. Base asset with parameters:
+- Base asset with parameters:
 * strike = numeric - trade price
 * expdate = Date
 * days = numeric - til expiration, overrides expdate
@@ -26,7 +26,7 @@ For input use:
 * q = numeric - face value
 
 
-3. Fixed income:
+- Fixed income:
 * expdate = Date - expiration date
 * days = numeric - til expiration, overrides expdate
 * r = numeric - coupon 
