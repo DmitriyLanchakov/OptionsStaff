@@ -1,0 +1,16 @@
+{
+    "contents" : "\n\n\n#+------------------------------------+\n#  Option profile\n#+------------------------------------+\nOptionProfile = function(S.vector, startDate=NULL, endDate=NULL, price=0, face=1, ...){\n  \n  library(fOptions)\n  \n  params = list(...)\n  TypeFlag = substr(tolower(params$TypeFlag), 1, 1)\n  X = as.numeric(params$X)\n  \n  Time = params$Time\n  \n  if(is.null(Time))\n    Time = endDate - startDate\n  \n  if(Time == 0)\n    Time = 0.0000001\n  \n  Time = as.numeric(Time)/252\n  \n  r = as.numeric(params$r)\n  b = 0\n  sigma = as.numeric(params$sigma)\n  \n result = sapply(S.vector, function(x){\n   \n    S = x\n    GBSOption(TypeFlag, S, X, Time, r, b, sigma)@price\n  }) - price\n  result = result * face\n \n  return(result)\n}\n\n#+------------------------------------+\n#  Fixed income\n#+------------------------------------+\n\nFixedIncome = function(startDate=NULL, endDate=NULL, Time=NULL, r=0, price=100, face=1){\n  \n  \n  if(is.null(Time))\n    Time = endDate - startDate\n  \n  if(Time == 0)\n    Time = 0.0000001\n  \n  Time = as.numeric(Time)/365\n  \n  result = price/100 * face * (1 + r*Time)\n  \n  return(result)\n}\n\n#+------------------------------------+\n#  Base asset - not ready\n#+------------------------------------+\n\nBaseAsset = function(S.vector=0, TypeFlag=NULL, startDate=NULL, endDate=NULL, Time=NULL, r=0, price=0, face=1){\n  \n\n  if(is.null(Time))\n    Time = endDate - startDate\n  \n  if(Time == 0)\n    Time = 0.0000001\n  \n  Time = as.numeric(Time)/365\n  \n  if(TypeFlag=='s')\n    result = (S.vector - price * (1 + r*Time)) * face \n  \n  if(TypeFlag=='f')\n    result = (S.vector * (1 - r*Time) - price) * face\n\n  return(result)\n}\n\n\n# \n# BaseAsset(1:10, 's', Time=365, r=0.1, price=5)\n# \n# \n# FixedIncome(Time=100, r=0.1, price=100, face=1000)\n# \n# assetreturn = FixedIncome(Time=100, r=0.1, price=100, face=1000) +\n#   OptionProfile(1:10,  startDate=Sys.Date(), endDate=as.Date('2015-09-15'), price=2, face=1000, TypeFlag='c', X=5, r=0.1, sigma=0.2)\n# \n# plot(\n#    assetreturn,\n#   type='l'\n#   )\n\n\n",
+    "created" : 1435671183477.000,
+    "dirty" : false,
+    "encoding" : "CP1251",
+    "folds" : "",
+    "hash" : "2615185485",
+    "id" : "905FB407",
+    "lastKnownWriteTime" : 1435764325,
+    "path" : "~/RBackup/OptionsPortfilioAnalyser/R/opt_profile.R",
+    "project_path" : "R/opt_profile.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}

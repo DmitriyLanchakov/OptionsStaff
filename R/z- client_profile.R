@@ -1,10 +1,7 @@
 
 #*****************************************************************
-# 
 # ??????? ?????????? ?? ???????? ?????????? ???????????? ????????
-# 
 # Ver. 1.0 - 03.07.2014
-# 
 # ****************************************************************
 
 
@@ -30,8 +27,7 @@ profit.factor = function(strat, ptc, s1, def, price){
     if(strat == "call"){
       
       if(price <= s1) { prft = def } 
-      else { prft = def * ( 1 + ptc*(price/s1-1) ) }
-      
+      else { prft = def * ( 1 + ptc*(price/s1-1) ) }  
     }
     
     if(strat == "put"){
@@ -41,9 +37,7 @@ profit.factor = function(strat, ptc, s1, def, price){
       
     }
     
-    
     return(prft)
-    
   }
 
 
@@ -62,7 +56,7 @@ Profile.Chart = function(df, ba.name){
   x.title = paste("Цена базисного актива, ", ba.name, sep = "")
     
   g = ggplot(data = df, aes(x = ba, y = pr)) + 
-    geom_line(size=1.2, color=rgb(red=148, green=0, blue=98, maxColorValue = 255)) +
+    geom_line(size=1.2, color=rgb(red=148, green=0, blue=98, maxColorValue=255)) +
     labs(x = x.title, y = "Доходность, %") +
     theme(axis.text = element_text(colour = "black")) + 
     scale_y_continuous(labels = percent)
