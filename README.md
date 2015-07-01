@@ -16,6 +16,7 @@ For input use:
 * price = option premium (overrides days, rate, iv)
 * q = numeric - face value
 
+
 2. Base asset with parameters:
 * strike = numeric - trade price
 * expdate = Date
@@ -23,6 +24,7 @@ For input use:
 * r = numeric - market interest rate
 * price = current market price (overrides days, rate)
 * q = numeric - face value
+
 
 3. Fixed income:
 * expdate = Date - expiration date
