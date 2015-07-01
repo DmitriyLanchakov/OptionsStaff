@@ -38,4 +38,3 @@ For input use:
 
 * - chartsGvis.R - Charts for base asset dynamics with target and strikes projected
 * - chartsGvis.R - Structured product profile chart (old)
-* 
