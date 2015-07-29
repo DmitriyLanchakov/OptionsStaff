@@ -1,3 +1,5 @@
+deriv_database.R
+----------------
 dbOptionsExps - fortsAllOptionsExps
 dbFuturesExps - fortsAllFuturesExps
 dbFutOptExps - fortsAllFutOptExps
@@ -7,3 +9,8 @@ Fut.Prices - fortsFutsPrices
 dbFutPrice - fortsFutPrice
 DB.Strikes.Vola - fortsIvAtStrike
 DB.Strikes.Ask.Bid - fortsStrikesAskBid
+
+deriv_vxsmile.R
+---------------
+vxSmile - smileValue
+VxSmileCoef - smileCoefs
