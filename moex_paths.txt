@@ -1,0 +1,19 @@
+Страница с данными по опционам
+http://moex.com/ru/derivatives/optionsdesk.aspx?sby=116&sub=on&code=RTS-12.15&c1=on&c2=on&c6=on&c3=on&c5=on&c4=on&c7=on&sid=1
+
+//*[@id="root"]/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/table[2] - базовый актив (фьючерс)
+
+//*[@id="root"]/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/table[3]/tbody/tr/td/table[1] - шапка опционной серии
+
+//*[@id="root"]/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/table[3]/tbody/tr/td/table[2] - данные опционной серии
+
+//*[@id="root"]/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/table[3]/tbody/tr/td/table[3] - график
+
+Следующая серия
+//*[@id="root"]/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/table[3]/tbody/tr/td/table[4]
+//*[@id="root"]/table/tbody/tr[1]/td[2]/table/tbody/tr[2]/td/table/tbody/tr/td/table/tbody/tr[2]/td[2]/table[3]/tbody/tr/td/table[5]
+...
+
+Доступ к полному описанию контракта по коду:
+http://moex.com/ru/contract.aspx?code=RI145000BJ5
+http://moex.com/ru/contract.aspx?code=RTS-12.15M151015CA%20145000
