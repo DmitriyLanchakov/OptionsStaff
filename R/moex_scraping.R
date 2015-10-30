@@ -46,10 +46,11 @@ datetimeCurrentInfo = function(x){
   library(dplyr)
   library(rvest)
   
+  #x = boardDownload('RTS-12.15')
   hh = x
   curtime = html_nodes(hh, xpath = '//table/tr[1]/td[2]/table/tr[2]/td/table/tr/td/table/tr[2]/td[2]/div[2]/span') %>% 
     html_text() %>%
-    substr(., 19, nchar(.)) %>% 
+    substr(., nchar(.)-15, nchar(.)) %>% 
     as.POSIXct(., format='%d.%m.%Y %H:%M')
   return(curtime)
 }
@@ -69,7 +70,12 @@ futureCurrentInfo = function(x){
   
   futData = html_nodes(hh, xpath = '//table/tr[1]/td[2]/table/tr[2]/td/table/tr/td/table/tr[2]/td[2]/table[2]') %>% 
     html_table(fill=T) %>%
-    data.frame(.) %>% select(c(1:12)) %>% slice(4) %>% gsub(paste0(rawToChar(as.raw(194)),'\\s' ), '', .)  %>% gsub(',', '.', .) %>% as.list(.) 
+    data.frame(.) %>% 
+    select(c(1:12)) %>% 
+    slice(4) %>% 
+    gsub(rawToChar(as.raw(194)), '', ., useBytes=T) %>% 
+    gsub(rawToChar(as.raw(160)), '', ., useBytes=T) %>% 
+    gsub(',', '.', .) %>% as.list(.) 
   
   if(futData[[2]]=='') 
     futData[4:12] = futData[3:11]
@@ -125,7 +131,13 @@ optionsCurrentInfo = function(x){
         for (i in 1:ncol(calls)){
           
           if( names(calls[i]) %in% c('code','roc','lastdate') ) next
-          calls[,i] = calls[,i] %>% gsub(paste0(rawToChar(as.raw(194)),'\\s' ), '', .) %>% gsub(',', '.', .) %>% gsub('-', '0', ., fixed=T ) %>% as.numeric
+          
+          calls[,i] = calls[,i] %>% 
+             gsub(rawToChar(as.raw(194)), '', ., useBytes=T) %>% 
+             gsub(rawToChar(as.raw(160)), '', ., useBytes=T) %>% 
+             gsub(',', '.', .) %>% 
+             gsub('-', '0', ., fixed=T ) %>% 
+             as.numeric
         }
         
         calls = calls[, c('code','strike','tprice','ask','bid','iv','OI','volrub','volopts','trades','last','lastdate','roc','cprice','maxpr','minpr')]
@@ -137,7 +149,12 @@ optionsCurrentInfo = function(x){
         for (i in 1:ncol(puts)){
           
           if( names(puts[i]) %in% c('code','roc','lastdate') ) next
-          puts[,i] = puts[,i] %>% gsub(paste0(rawToChar(as.raw(194)),'\\s' ), '', .) %>% gsub(',', '.', .) %>% gsub('-', '0', ., fixed=T ) %>% as.numeric
+          puts[,i] = puts[,i] %>% 
+          gsub(rawToChar(as.raw(194)), '', ., useBytes=T) %>% 
+          gsub(rawToChar(as.raw(160)), '', ., useBytes=T) %>% 
+          gsub(',', '.', .) %>% 
+          gsub('-', '0', ., fixed=T ) %>%
+          as.numeric
         }
         
         puts = puts[, c('code','strike','tprice','ask','bid','iv','OI','volrub','volopts','trades','last','lastdate','roc','cprice','maxpr','minpr')]
@@ -158,9 +175,17 @@ optionsCurrentInfo = function(x){
 
 }
 
-# (boardDownload("RTS-12.15") %>% optionsCurrentInfo())[[1]][['puts']] %>% dplyr::filter(iv>100)
+# mrx = ((boardDownload("RTS-12.15") %>% optionsCurrentInfo())[[1]][['calls']])$strike[1]
 
+# rawToChar(as.raw(160))
+# 
 
+# sapply(c(1:nchar(mrx)), function(x) {
+#   
+#   substr(mrx, x, x) %>% charToRaw
+#   
+#   })
+# substr(mrx,2,2) %>% charToRaw()
 
 # +----------------------------------------------+
 # | Add greeks
@@ -168,7 +193,7 @@ optionsCurrentInfo = function(x){
 
 
 
-moexGreeks = function(x, expdate)({
+moexGreeks = function(x, expdate){
   
   require(fOptions)
   #expdate = '15.03.2016'
@@ -211,10 +236,10 @@ moexGreeks = function(x, expdate)({
   
   return(brdwgreeks)
 
-})
+}
 
 
 
 # fut="Si-12.15"
-# (boardDownload("Si-12.15") %>% moexGreeks(., '15.12.2015'))$calls %>% View
+# (boardDownload("MXI-12.15") %>% moexGreeks(., '17.12.2015'))$calls %>% View
 
