@@ -175,17 +175,9 @@ optionsCurrentInfo = function(x){
 
 }
 
-# mrx = ((boardDownload("RTS-12.15") %>% optionsCurrentInfo())[[1]][['calls']])$strike[1]
+#   ((boardDownload("RTS-12.15") %>% optionsCurrentInfo())[[2]][['calls']])[, c('strike', 'iv')] %>% as.data.frame %>% qplot(data=., x=strike, y=iv)
 
-# rawToChar(as.raw(160))
-# 
 
-# sapply(c(1:nchar(mrx)), function(x) {
-#   
-#   substr(mrx, x, x) %>% charToRaw
-#   
-#   })
-# substr(mrx,2,2) %>% charToRaw()
 
 # +----------------------------------------------+
 # | Add greeks
